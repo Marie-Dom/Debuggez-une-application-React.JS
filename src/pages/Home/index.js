@@ -27,14 +27,14 @@ const Page = () => {
           <h2 id="nos-services" className="Title">
             Nos services
           </h2>
-          <p>Nous organisons des événements sur mesure partout dans le monde</p>
+          <p>Nous organisons des évènements sur mesure partout dans le monde</p>
           <div className="ListContainer">
             <ServiceCard imageSrc="/images/priscilla-du-preez-Q7wGvnbuwj0-unsplash1.png">
               <h3>Soirée d’entreprise</h3>
               Une soirée d’entreprise vous permet de réunir vos équipes pour un
               moment convivial afin de valoriser votre société en projetant une
               image dynamique. Nous vous proposons d’organiser pour vous vos
-              diners et soirée d’entreprise
+              diners et soirées d’entreprise
             </ServiceCard>
             <ServiceCard imageSrc="/images/hall-expo.png">
               <h3>Conférences</h3>
@@ -64,8 +64,8 @@ const Page = () => {
           <h2 id="notre-equipe" className="Title">
             Notre équipe
           </h2>
-          <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
-          <div className="ListContainer">
+          <p>Une équipe d’experts dédiée à l’organisation de vos évènements</p>
+          <div data-testid="people-list" className="ListContainer">
             <PeopleCard
               imageSrc="/images/stephanie-liverani-Zz5LQe-VSMY-unsplash.png"
               name="Samira"
@@ -117,9 +117,10 @@ const Page = () => {
           </Modal>
         </div>
       </main>
-      <footer className="row">
+      <footer data-testid="footer-testid" className="row">
         <div className="col presta" data-testid="last-event">
           <h3>Notre dernière prestation</h3>
+          {/* Vérification de l'existence d'un dernier élément (last) et que "last.cover" et "last.title" sont définis, si oui alors il est affiché, sinon il n'y a rien (null) */}
           <EventCard
             imageSrc={
               (last?.cover ?? null) == null
@@ -157,8 +158,8 @@ const Page = () => {
           <p>
             Une agence événementielle propose des prestations de service
             spécialisées dans la conception et l&apos;organisation de divers
-            événements tels que des événements festifs, des manifestations
-            sportives et culturelles, des événements professionnels
+            évènements tels que des évènements festifs, des manifestations
+            sportives et culturelles, des évènements professionnels
           </p>
         </div>
       </footer>
