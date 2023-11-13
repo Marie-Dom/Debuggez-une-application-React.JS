@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useMemo,
 } from "react";
 
 const DataContext = createContext({});
@@ -23,41 +24,33 @@ export const DataProvider = ({ children }) => {
 
   const getData = useCallback(async () => {
     try {
-      setData(await api.loadData());
+      const jsonData = await api.loadData();
+      setData(jsonData);
+      if (Array.isArray(jsonData.events) && jsonData.events.length > 0) {
+        setLast(jsonData.events[jsonData.events.length - 1]);
+      }
     } catch (err) {
       setError(err);
     }
   }, []);
-  useEffect(() => {
-    if (data) return;
-    getData();
-  });
 
-  function updateLastEvent() {
-    if (data?.events) {
-      const sortedEvents = data?.events.sort(
-        (evtA, evtB) => new Date(evtB.date) - new Date(evtA.date)
-      );
-      const lastEventResult = sortedEvents?.[0];
-      setLast(lastEventResult);
+  useEffect(() => {
+    if (!data) {
+      getData();
     }
+  }, [data]);
+
+  const contextValue = useMemo(
+    () => ({ data, error, last }),
+    [data, error, last]
+  );
+  // Vérifie si data n'est pas null avant de fournir les données
+  if (data === null) {
+    return <div>Loading...</div>;
   }
 
-  useEffect(() => {
-    updateLastEvent();
-  }, [data, updateLastEvent]);
-
   return (
-    <DataContext.Provider
-      // eslint-disable-next-line react/jsx-no-constructed-context-values
-      value={{
-        data,
-        error,
-        last,
-      }}
-    >
-      {children}
-    </DataContext.Provider>
+    <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>
   );
 };
 

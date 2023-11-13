@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Form from "./index";
 
 describe("When Events is created", () => {
@@ -8,6 +8,8 @@ describe("When Events is created", () => {
     await screen.findByText("Nom");
     await screen.findByText("Prénom");
     await screen.findByText("Personel / Entreprise");
+    await screen.findByTestId("button-test-id");
+    await screen.findByText("Envoyer");
   });
 
   describe("and a click is triggered on the submit button", () => {
@@ -21,8 +23,16 @@ describe("When Events is created", () => {
           bubbles: true,
         })
       );
+      // Après le click, on attend que le texte "En cours" apparaisse
       await screen.findByText("En cours");
-      await screen.findByText("Envoyer");
+      // Le texte "Envoyer" ne doit plus être visible
+      expect(screen.queryByText("Envoyer")).toBeNull();
+      // Attend que le texte "Envoyer" réapparaisse après l'envoi du formulaire.
+      await waitFor(() => {
+        expect(screen.queryByText("En cours")).toBeNull();
+        expect(screen.queryByText("Envoyer")).not.toBeNull();
+      });
+
       expect(onSuccess).toHaveBeenCalled();
     });
   });

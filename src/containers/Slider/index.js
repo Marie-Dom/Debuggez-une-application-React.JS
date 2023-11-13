@@ -38,9 +38,11 @@ const Slider = () => {
             <img src={event.cover} alt="forum" />
             <div className="SlideCard__descriptionContainer">
               <div className="SlideCard__description">
-                <h3>{event.title}</h3>
-                <p>{event.description}</p>
-                <div>{getMonth(new Date(event.date))}</div>
+                <h3 data-testid="slide-card-title">{event.title}</h3>
+                <p data-testid="slide-card-description">{event.description}</p>
+                <div data-testid="slide-card-month">
+                  {getMonth(new Date(event.date))}
+                </div>
               </div>
             </div>
           </div>

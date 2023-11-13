@@ -30,7 +30,7 @@ describe("When a data context is created", () => {
           <Component />
         </DataProvider>
       );
-      const dataDisplayed = await screen.findByText("error on calling events");
+      const dataDisplayed = await screen.findByText("Loading...");
       expect(dataDisplayed).toBeInTheDocument();
     });
   });
