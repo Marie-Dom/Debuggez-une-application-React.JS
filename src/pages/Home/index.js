@@ -10,6 +10,7 @@ import Logo from "../../components/Logo";
 import Icon from "../../components/Icon";
 import Form from "../../containers/Form";
 import Modal from "../../containers/Modal";
+import ModalEvent from "../../containers/ModalEvent";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
@@ -120,18 +121,20 @@ const Page = () => {
       <footer data-testid="footer-testid" className="row">
         <div className="col presta" data-testid="last-event">
           <h3>Notre dernière prestation</h3>
-          {/* Vérification de l'existence d'un dernier élément (last) et que "last.cover" et "last.title" sont définis, si oui alors il est affiché, sinon il n'y a rien (null) */}
-          <EventCard
-            imageSrc={
-              (last?.cover ?? null) == null
-                ? "/images/alexandre-pellaes-6vAjp0pscX0-unsplash.png"
-                : last?.cover
-            }
-            title={(last?.title ?? null) == null ? "" : last?.title}
-            date={new Date(last?.date)}
-            small
-            label="boom"
-          />
+          {last && (
+            <Modal Content={<ModalEvent event={last} />}>
+              {({ setIsOpened }) => (
+                <EventCard
+                  imageSrc={last.cover}
+                  title={last.title}
+                  date={new Date(last.date)}
+                  small
+                  label="boom"
+                  onClick={() => setIsOpened(true)}
+                />
+              )}
+            </Modal>
+          )}
         </div>
         <div className="col contact">
           <h3>Contactez-nous</h3>

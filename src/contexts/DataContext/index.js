@@ -45,6 +45,13 @@ export const DataProvider = ({ children }) => {
     [data, error, last]
   );
   // Vérifie si data n'est pas null avant de fournir les données
+  if (error !== null) {
+    return (
+      <div>
+        An error occured <div>{error.message}</div>
+      </div>
+    );
+  }
   if (data === null) {
     return <div>Loading...</div>;
   }

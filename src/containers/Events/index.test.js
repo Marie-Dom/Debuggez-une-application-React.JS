@@ -51,74 +51,78 @@ describe("When Events is created", () => {
         </DataProvider>
       );
     });
-    await screen.findByText("avril");
+    expect(await screen.findByText("avril")).toBeInTheDocument();
   });
-  describe("and an error occured", () => {
-    it("an error message is displayed", async () => {
-      api.loadData = jest.fn().mockRejectedValue("An error occured");
-      await act(async () => {
-        render(
-          <DataProvider>
-            <Events />
-          </DataProvider>
-        );
-      });
-      expect(await screen.findByText("An error occured")).toBeInTheDocument();
+});
+
+describe("and an error occured", () => {
+  it("an error message is displayed", async () => {
+    window.console.error = jest.fn();
+    api.loadData = null;
+    jest.fn().mockRejectedValue("An error occured");
+
+    await act(async () => {
+      render(
+        <DataProvider>
+          <Events />
+        </DataProvider>
+      );
     });
+    expect(await screen.findByText("An error occured")).toBeInTheDocument();
   });
-  describe("and we select a category", () => {
-    // suppression de it.only qui permet d'ignorer un test, afin d'effectuer et valider chaque test.
-    it("an filtered list is displayed", async () => {
-      api.loadData = jest.fn().mockReturnValue(data);
-      await act(async () => {
-        render(
-          <DataProvider>
-            <Events />
-          </DataProvider>
-        );
-      });
-      await screen.findByText("Forum #productCON");
-      fireEvent(
-        await screen.findByTestId("collapse-button-testid"),
-        new MouseEvent("click", {
-          cancelable: true,
-          bubbles: true,
-        })
+});
+describe("and we select a category", () => {
+  // suppression de it.only qui permet d'ignorer un test, afin d'effectuer et valider chaque test.
+  it("an filtered list is displayed", async () => {
+    api.loadData = jest.fn().mockReturnValue(data);
+    await act(async () => {
+      render(
+        <DataProvider>
+          <Events />
+        </DataProvider>
       );
-      fireEvent(
-        (await screen.findAllByText("soirée entreprise"))[0],
-        new MouseEvent("click", {
-          cancelable: true,
-          bubbles: true,
-        })
-      );
-
-      await screen.findByText("Conférence #productCON");
-      expect(screen.queryByText("Forum #productCON")).not.toBeInTheDocument();
     });
+    await screen.findByText("Forum #productCON");
+    fireEvent(
+      await screen.findByTestId("collapse-button-testid"),
+      new MouseEvent("click", {
+        cancelable: true,
+        bubbles: true,
+      })
+    );
+    fireEvent(
+      (await screen.findAllByText("soirée entreprise"))[0],
+      new MouseEvent("click", {
+        cancelable: true,
+        bubbles: true,
+      })
+    );
+
+    await screen.findByText("Conférence #productCON");
+    expect(screen.queryByText("Forum #productCON")).not.toBeInTheDocument();
   });
+});
 
-  describe("and we click on an event", () => {
-    it("the event detail is displayed", async () => {
-      api.loadData = jest.fn().mockReturnValue(data);
-      await act(async () => {
-        render(
-          <DataProvider>
-            <Events />
-          </DataProvider>
-        );
-      });
-
-      fireEvent(
-        await screen.findByText("Conférence #productCON"),
-        new MouseEvent("click", {
-          cancelable: true,
-          bubbles: true,
-        })
+describe("and we click on an event", () => {
+  it("the event detail is displayed", async () => {
+    api.loadData = jest.fn().mockReturnValue(data);
+    await act(async () => {
+      render(
+        <DataProvider>
+          <Events />
+        </DataProvider>
       );
-
-      await screen.findByText("24-25-26 Février");
-      await screen.findByText("1 site web dédié");
     });
+
+    fireEvent(
+      await screen.findByText("Conférence #productCON"),
+      new MouseEvent("click", {
+        cancelable: true,
+        bubbles: true,
+      })
+    );
+
+    await screen.findByText("24-25-26 Février");
+    await screen.findByText("1 site web dédié");
   });
 });
