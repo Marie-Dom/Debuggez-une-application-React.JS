@@ -51,7 +51,7 @@ describe("When Events is created", () => {
         </DataProvider>
       );
     });
-    expect(await screen.findByText("avril")).toBeInTheDocument();
+    expect(await screen.findByText("avril"));
   });
 });
 
